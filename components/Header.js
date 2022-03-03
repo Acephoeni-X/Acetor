@@ -31,7 +31,7 @@ const Header = ({ query, data, image }) => {
         content={
           query === ""
             ? "Get Magnet/Torrent links for everything !!!"
-            : Object.keys(data).length === 15 || Object.keys(data).length === 40
+            : Object.keys(data).length >= 0
             ? data.name
             : data.map((m) => m.name)
         }
@@ -40,9 +40,7 @@ const Header = ({ query, data, image }) => {
       <meta
         name="keywords"
         content={
-          Object.keys(data).length === 15 || Object.keys(data).length === 40
-            ? data.name
-            : data.map((m) => m.name)
+          Object.keys(data).length >= 0 ? data.name : data.map((m) => m.name)
         }
       />
 
@@ -61,7 +59,7 @@ const Header = ({ query, data, image }) => {
         content={
           query === ""
             ? "Get Magnet/Torrent links for everything !!!"
-            : Object.keys(data).length === 15 || Object.keys(data).length === 40
+            : Object.keys(data).length >= 0
             ? data.descr
             : data.map((m) => m.descr)
         }
@@ -90,7 +88,7 @@ const Header = ({ query, data, image }) => {
         content={
           query === ""
             ? "Get Magnet/Torrent links for everything !!!"
-            : Object.keys(data).length === 15 || Object.keys(data).length === 40
+            : Object.keys(data).length >= 0
             ? data.descr
             : data.map((m) => m.descr)
         }
