@@ -89,7 +89,7 @@ const Info = ({ data, magnet }) => {
                   data-modal-toggle="popup-modal"
                   disabled
                 >
-                  Copied...
+                  Copied to Clipboard
                 </button>
               ) : (
                 <button

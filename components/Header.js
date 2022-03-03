@@ -1,7 +1,7 @@
 import React from "react";
 import Head from "next/head";
 
-const Header = ({ query, data }) => {
+const Header = ({ query, data, image }) => {
   return (
     <Head>
       <meta charSet="utf-8" />
@@ -31,7 +31,7 @@ const Header = ({ query, data }) => {
         content={
           query === ""
             ? "Get Magnet/Torrent links for everything !!!"
-            : Object.keys(data).length === 15
+            : Object.keys(data).length === 15 || Object.keys(data).length === 40
             ? data.name
             : data.map((m) => m.name)
         }
@@ -40,7 +40,9 @@ const Header = ({ query, data }) => {
       <meta
         name="keywords"
         content={
-          Object.keys(data).length === 15 ? data.name : data.map((m) => m.name)
+          Object.keys(data).length === 15 || Object.keys(data).length === 40
+            ? data.name
+            : data.map((m) => m.name)
         }
       />
 
@@ -59,14 +61,18 @@ const Header = ({ query, data }) => {
         content={
           query === ""
             ? "Get Magnet/Torrent links for everything !!!"
-            : Object.keys(data).length === 15
+            : Object.keys(data).length === 15 || Object.keys(data).length === 40
             ? data.descr
             : data.map((m) => m.descr)
         }
       />
       <meta
         property="og:image"
-        content="https://github.com/Rishi-Sharma2002/TorrentWebsite/blob/master/src/AceTor.png?raw=true"
+        content={
+          image
+            ? image
+            : "https://github.com/Rishi-Sharma2002/TorrentWebsite/blob/master/src/AceTor.png?raw=true"
+        }
       />
 
       <meta property="twitter:card" content="summary_large_image" />
@@ -84,14 +90,18 @@ const Header = ({ query, data }) => {
         content={
           query === ""
             ? "Get Magnet/Torrent links for everything !!!"
-            : Object.keys(data).length === 15
+            : Object.keys(data).length === 15 || Object.keys(data).length === 40
             ? data.descr
             : data.map((m) => m.descr)
         }
       />
       <meta
         property="twitter:image"
-        content="https://github.com/Rishi-Sharma2002/TorrentWebsite/blob/master/src/AceTor.png?raw=true"
+        content={
+          image
+            ? image
+            : "https://github.com/Rishi-Sharma2002/TorrentWebsite/blob/master/src/AceTor.png?raw=true"
+        }
       />
     </Head>
   );
