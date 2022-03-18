@@ -7,7 +7,7 @@ const Footer = () => {
       <div className="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col">
         <a className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
           <Image
-            src="https://github.com/Rishi-Sharma2002/TorrentWebsite/blob/master/src/AceTor.png?raw=true"
+            src="https://ipfs.infura.io/ipfs/Qme6QfriyDgvWp1wS3kxRyizVPsS3WGDCXhv95m5wt1Dzg"
             width={50}
             height={54}
             className="hover:cursor-pointer hover:animate-bounce "

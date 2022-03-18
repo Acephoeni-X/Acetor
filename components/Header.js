@@ -15,7 +15,7 @@ const Header = ({ query, data, image }) => {
       </title>
       <link
         rel="shortcut icon"
-        href="https://github.com/Rishi-Sharma2002/TorrentWebsite/blob/master/src/AceTor.png?raw=true"
+        href="https://ipfs.infura.io/ipfs/Qme6QfriyDgvWp1wS3kxRyizVPsS3WGDCXhv95m5wt1Dzg"
       />
       <meta
         name="title"
@@ -69,7 +69,7 @@ const Header = ({ query, data, image }) => {
         content={
           image
             ? image
-            : "https://github.com/Rishi-Sharma2002/TorrentWebsite/blob/master/src/AceTor.png?raw=true"
+            : "https://ipfs.infura.io/ipfs/Qme6QfriyDgvWp1wS3kxRyizVPsS3WGDCXhv95m5wt1Dzg"
         }
       />
 
@@ -98,7 +98,7 @@ const Header = ({ query, data, image }) => {
         content={
           image
             ? image
-            : "https://github.com/Rishi-Sharma2002/TorrentWebsite/blob/master/src/AceTor.png?raw=true"
+            : "https://ipfs.infura.io/ipfs/Qme6QfriyDgvWp1wS3kxRyizVPsS3WGDCXhv95m5wt1Dzg"
         }
       />
     </Head>

@@ -21,8 +21,8 @@ const Imdb = ({ data, magnet }) => {
               <h2 className="text-sm title-font text-green-300 tracking-widest">
                 {data.Genre}
               </h2>
-              <h1 className="text-gray-200 text-3xl title-font font-medium mb-1">
-                {data.Title}
+              <h1 className="text-gray-200 text-3xl title-font font-medium mb-1  break-words">
+                {data.name}
               </h1>
               <div className="flex mb-4">
                 <span className="flex flex-row space-x-4">

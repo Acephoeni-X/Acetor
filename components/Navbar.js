@@ -12,7 +12,7 @@ const Navbar = () => {
         <Link href="/">
           <a className="flex title-font font-medium items-center text-gray-500 mb-4 md:mb-0">
             <Image
-              src="https://github.com/Rishi-Sharma2002/TorrentWebsite/blob/master/src/AceTor.png?raw=true"
+              src="https://ipfs.infura.io/ipfs/Qme6QfriyDgvWp1wS3kxRyizVPsS3WGDCXhv95m5wt1Dzg"
               width={50}
               height={54}
               className="hover:cursor-pointer hover:animate-bounce "
@@ -23,36 +23,36 @@ const Navbar = () => {
 
         <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
           <Link href={"/audio/"}>
-            <a className="mr-5 hover:text-green-200 hover:cursor-pointer">
+            <a className="mr-5 hover:text-green-200 hover:cursor-pointer hover:underline">
               Audio
             </a>
           </Link>
           <Link href={"/movies/"}>
-            <a className="mr-5 hover:text-green-200 hover:cursor-pointer">
+            <a className="mr-5 hover:text-green-200 hover:cursor-pointer hover:underline">
               Movies
             </a>
           </Link>
 
           <Link href={"/apps/"}>
-            <a className="mr-5 hover:text-green-200 hover:cursor-pointer">
+            <a className="mr-5 hover:text-green-200 hover:cursor-pointer hover:underline">
               Applications
             </a>
           </Link>
 
           <Link href={"/games/"}>
-            <a className="mr-5 hover:text-green-200 hover:cursor-pointer">
+            <a className="mr-5 hover:text-green-200 hover:cursor-pointer hover:underline">
               Games
             </a>
           </Link>
 
           <Link href={"/xxx/"}>
-            <a className="mr-5 hover:text-green-200 hover:cursor-pointer">
+            <a className="mr-5 hover:text-green-200 hover:cursor-pointer hover:underline">
               Porn
             </a>
           </Link>
 
           <Link href={"/others/"}>
-            <a className="mr-5 hover:text-green-200 hover:cursor-pointer">
+            <a className="mr-5 hover:text-green-200 hover:cursor-pointer hover:underline">
               Others
             </a>
           </Link>
@@ -66,7 +66,7 @@ const Navbar = () => {
               type="text"
               id="name"
               name="name"
-              className="w-full  bg-gray-600 rounded border border-gray-300 focus:border-green-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 px-3 leading-8 transition-colors duration-200 ease-in-out"
+              className="w-full bg-gray-600 rounded border border-gray-300 focus:border-green-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 px-3 leading-8 transition-colors duration-200 ease-in-out"
               placeholder={input !== "" ? input : "search"}
               onChange={(e) => {
                 setInput(e.target.value);
