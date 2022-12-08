@@ -7,6 +7,7 @@ const Header = ({ query, data, image }) => {
       <meta charSet="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta name="google-site-verification" content={process.env.GOOGLE} />
+      <link rel="shortcut icon" href="/favicon.ico" />
       <title>
         Acetor
         {query === ""
