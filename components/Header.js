@@ -10,7 +10,7 @@ const Header = ({ query, data, image }) => {
       <title>
         Acetor
         {query === ""
-          ? ""
+          ? " | Free Movies, TV-Series, Music, Games and Softwares"
           : "-" + query.charAt(0).toUpperCase() + query.slice(1)}
       </title>
       <link
@@ -21,8 +21,8 @@ const Header = ({ query, data, image }) => {
         name="title"
         content={
           query === ""
-            ? "Get Magnet links for everything !!!"
-            : `Get Magnet links for ${query}`
+            ? "Acetor is the most trusted Torrent website in the world, offering the most popular movies, TV-shows, applications, music, games and so on."
+            : `Get Magnet links for ${query}, and also download many more popular movies, TV-shows, applications, music, games and so on.`
         }
       />
 
@@ -30,7 +30,7 @@ const Header = ({ query, data, image }) => {
         name="description"
         content={
           query === ""
-            ? "Get Magnet/Torrent links for everything !!!"
+            ? "Acetor is the most trusted Torrent website in the world, offering the most popular movies, TV-shows, applications, music, games and so on."
             : Object.keys(data).length >= 0
             ? data.name
             : data.map((m) => m.name)
@@ -58,7 +58,7 @@ const Header = ({ query, data, image }) => {
         property="og:description"
         content={
           query === ""
-            ? "Get Magnet/Torrent links for everything !!!"
+            ? "Acetor is the most trusted Torrent website in the world, offering the most popular movies, TV-series, applications, music, games and so on."
             : Object.keys(data).length >= 0
             ? data.descr
             : data.map((m) => m.descr)
@@ -87,7 +87,7 @@ const Header = ({ query, data, image }) => {
         property="twitter:description"
         content={
           query === ""
-            ? "Get Magnet/Torrent links for everything !!!"
+            ? "Acetor is the most trusted Torrent website in the world, offering the most popular movies, TV-series, shows, applications, music, games and so on."
             : Object.keys(data).length >= 0
             ? data.descr
             : data.map((m) => m.descr)
