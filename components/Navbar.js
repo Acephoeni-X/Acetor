@@ -12,7 +12,7 @@ const Navbar = () => {
         <Link href="/">
           <a className="flex title-font font-medium items-center text-gray-500 mb-4 md:mb-0">
             <Image
-              src="https://ipfs.infura.io/ipfs/Qme6QfriyDgvWp1wS3kxRyizVPsS3WGDCXhv95m5wt1Dzg"
+              src="/Acetor.png"
               width={50}
               height={54}
               className="hover:cursor-pointer hover:animate-bounce "

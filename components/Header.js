@@ -14,10 +14,7 @@ const Header = ({ query, data, image }) => {
           ? " | Free Movies, TV-Series, Music, Games and Softwares"
           : "-" + query.charAt(0).toUpperCase() + query.slice(1)}
       </title>
-      <link
-        rel="shortcut icon"
-        href="https://ipfs.infura.io/ipfs/Qme6QfriyDgvWp1wS3kxRyizVPsS3WGDCXhv95m5wt1Dzg"
-      />
+      <link rel="shortcut icon" href="/Acetor.png" />
       <meta
         name="title"
         content={
@@ -65,14 +62,7 @@ const Header = ({ query, data, image }) => {
             : data.map((m) => m.descr)
         }
       />
-      <meta
-        property="og:image"
-        content={
-          image
-            ? image
-            : "https://ipfs.infura.io/ipfs/Qme6QfriyDgvWp1wS3kxRyizVPsS3WGDCXhv95m5wt1Dzg"
-        }
-      />
+      <meta property="og:image" content={image ? image : "/Acetor.png"} />
 
       <meta property="twitter:card" content="summary_large_image" />
       <meta property="twitter:url" content="https://acetor.live" />
@@ -94,14 +84,7 @@ const Header = ({ query, data, image }) => {
             : data.map((m) => m.descr)
         }
       />
-      <meta
-        property="twitter:image"
-        content={
-          image
-            ? image
-            : "https://ipfs.infura.io/ipfs/Qme6QfriyDgvWp1wS3kxRyizVPsS3WGDCXhv95m5wt1Dzg"
-        }
-      />
+      <meta property="twitter:image" content={image ? image : "Acetor.png"} />
     </Head>
   );
 };
