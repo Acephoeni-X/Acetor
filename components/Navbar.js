@@ -9,8 +9,7 @@ const Navbar = () => {
   return (
     <header className="text-gray-200 body-font ">
       <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-        <Link href="/">
-          <a className="flex title-font font-medium items-center text-gray-500 mb-4 md:mb-0">
+        <Link href="/" className="flex title-font font-medium items-center text-gray-500 mb-4 md:mb-0">
             <Image
               src="/Acetor.png"
               width={50}
@@ -18,43 +17,30 @@ const Navbar = () => {
               className="hover:cursor-pointer hover:animate-bounce "
               alt="acetor"
             ></Image>
-          </a>
         </Link>
 
         <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
-          <Link href={"/audio/"}>
-            <a className="mr-5 hover:text-green-200 hover:cursor-pointer hover:underline">
+          <Link href={"/audio/"} className="mr-5 hover:text-green-200 hover:cursor-pointer hover:underline">
               Audio
-            </a>
           </Link>
-          <Link href={"/movies/"}>
-            <a className="mr-5 hover:text-green-200 hover:cursor-pointer hover:underline">
+          <Link href={"/movies/"} className="mr-5 hover:text-green-200 hover:cursor-pointer hover:underline">
               Movies
-            </a>
           </Link>
 
-          <Link href={"/apps/"}>
-            <a className="mr-5 hover:text-green-200 hover:cursor-pointer hover:underline">
+          <Link href={"/apps/"} className="mr-5 hover:text-green-200 hover:cursor-pointer hover:underline">
               Applications
-            </a>
           </Link>
 
-          <Link href={"/games/"}>
-            <a className="mr-5 hover:text-green-200 hover:cursor-pointer hover:underline">
+          <Link href={"/games/"} className="mr-5 hover:text-green-200 hover:cursor-pointer hover:underline">
               Games
-            </a>
           </Link>
 
-          <Link href={"/xxx/"}>
-            <a className="mr-5 hover:text-green-200 hover:cursor-pointer hover:underline">
+          <Link href={"/xxx/"} className="mr-5 hover:text-green-200 hover:cursor-pointer hover:underline">
               Porn
-            </a>
           </Link>
 
-          <Link href={"/others/"}>
-            <a className="mr-5 hover:text-green-200 hover:cursor-pointer hover:underline">
+          <Link href={"/others/"} className="mr-5 hover:text-green-200 hover:cursor-pointer hover:underline">
               Others
-            </a>
           </Link>
           <form
             onSubmit={(e) => {

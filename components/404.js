@@ -270,10 +270,8 @@ const Error = () => {
             <p className="text-sm md:text-base text-yellow-300 p-2 mb-4">
               OH ! Ho Wrong Page 🤫
             </p>
-            <Link href="/">
-              <a className="bg-transparent hover:bg-yellow-300 text-yellow-300 hover:text-white rounded shadow hover:shadow-lg py-2 px-4 border border-yellow-300 hover:border-transparent">
+            <Link href="/" className="bg-transparent hover:bg-yellow-300 text-yellow-300 hover:text-white rounded shadow hover:shadow-lg py-2 px-4 border border-yellow-300 hover:border-transparent">
                 Return To Home Page
-              </a>
             </Link>
           </div>
         </div>

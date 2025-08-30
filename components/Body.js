@@ -20,7 +20,7 @@ const Body = ({ data, query }) => {
                   : "Top 100"}
               </h1>
             </div>
-            <div className=" w-full mx-auto overflow-auto">
+            <div className="w-full mx-auto overflow-auto">
               <table className="table-auto w-full text-left whitespace-no-wrap">
                 <thead>
                   <tr>
@@ -44,25 +44,26 @@ const Body = ({ data, query }) => {
                 </thead>
                 <tbody>
                   {data.map((d) => (
-                    <tr key={d.id}>
-                      <Link href={"/info/" + d.id} passHref>
-                        <td
-                          className="border-b-2 border-gray-200 px-4 py-3 text-gray-300"
-                          style={{ cursor: "pointer" }}
-                        >
-                          {d.name}
-                        </td>
-                      </Link>
+                    <tr
+                      key={d.id}
+                      className="hover:bg-gray-700 transition cursor-pointer"
+                      onClick={() => (window.location.href = `/info/${d.id}`)}
+                    >
                       <td className="border-b-2 border-gray-200 px-4 py-3 text-gray-300">
-                        {convertToGB(d.size) + " GB"}
+                        <Link href={`/info/${d.id}`} className="hover:underline">
+                          {d.name}
+                        </Link>
+                      </td>
+                      <td className="border-b-2 border-gray-200 px-4 py-3 text-gray-300">
+                        {d.size ? convertToGB(d.size) + " GB" : "N/A"}
                       </td>
                       <td className="border-b-2 border-gray-200 px-4 py-3 text-green-300">
-                        {d.seeders + "  ⬆"}
+                        {d.seeders} ⬆
                       </td>
-                      <td className="border-b-2 border-gray-200 px-4 py-3 text-lg text-red-300">
-                        {d.leechers + "  ⬇"}
+                      <td className="border-b-2 border-gray-200 px-4 py-3 text-red-300">
+                        {d.leechers} ⬇
                       </td>
-                      <td className="border-b-2 border-gray-200 px-4 py-3 text-lg text-gray-300">
+                      <td className="border-b-2 border-gray-200 px-4 py-3 text-gray-300">
                         {d.username}
                       </td>
                       <td className="border-b-2 border-gray-200 w-10 text-center text-gray-300"></td>
@@ -78,7 +79,9 @@ const Body = ({ data, query }) => {
     </>
   );
 };
+
 function convertToGB(bytesValue) {
+  if (!bytesValue || isNaN(bytesValue)) return "0.00";
   let gbValue = (bytesValue / (1024 * 1024 * 1024)).toFixed(2);
   return gbValue;
 }
