@@ -11,10 +11,11 @@ export async function getServerSideProps(context) {
   const { query } = context.query;
   let data = await (
     await fetch(`${process.env.NEXT_PUBLIC_SEARCH}${query} `)
-  ).json();
+  )
+  console.log("Here is a data", data);
   return {
     props: {
-      data,
+      data: data.json(),
       query,
     },
   };
