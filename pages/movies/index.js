@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Body from "../../components/Body";
+import NodeCache from "node-cache";
 
 export default function Home({ data }) {
   useEffect(() => {
@@ -9,9 +10,16 @@ export default function Home({ data }) {
 }
 
 export async function getStaticProps() {
-  const data = await (
-    await fetch(process.env.PRECOMPILED + "_200.json")
-  ).json();
+  const cache = new NodeCache({ stdTTL: 120 });
+  let data;
+  if(cache.has("movies_200")){
+    data = cache.get("movies_200");
+  }else{
+    data = await (
+        await fetch(process.env.PRECOMPILED + "_200.json")
+    ).json();
+    cache.set("movies_200", data);
+  }
   return {
     props: {
       data,
