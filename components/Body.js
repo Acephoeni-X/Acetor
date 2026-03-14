@@ -142,12 +142,3 @@ function convertToGB(bytesValue) {
 }
 
 export default Body;
-
-
-function convertToGB(bytesValue) {
-  if (!bytesValue || isNaN(bytesValue)) return "0.00";
-  let gbValue = (bytesValue / (1024 * 1024 * 1024)).toFixed(2);
-  return gbValue;
-}
-
-export default Body;
