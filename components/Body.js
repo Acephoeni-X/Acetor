@@ -10,8 +10,8 @@ const Body = ({ data: initialData, query }) => {
 
   useEffect(() => {
     // If server-side data failed (empty), try fetching from the browser (can solve Cloudflare JS challenges)
-    if (!query) return;
-    if (initialData && initialData.length) return;
+    const shouldFetch = !initialData || !initialData.length;
+    if (!shouldFetch) return;
 
     const fetchClientData = async () => {
       setStatus("loading");
@@ -124,6 +124,13 @@ const Body = ({ data: initialData, query }) => {
                       <td className="border-b-2 border-gray-200 w-10 text-center text-gray-300"></td>
                     </tr>
                   ))}
+                  {status === "loaded" && data.length === 0 && (
+                    <tr>
+                      <td colSpan={6} className="border-b-2 border-gray-200 px-4 py-6 text-center text-gray-400">
+                        No results available. Please refresh or try another category.
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
