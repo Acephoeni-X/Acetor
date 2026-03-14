@@ -19,16 +19,15 @@ const SearchBody = ({ query }) => {
       setStatus("loading");
 
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_SEARCH}${encodeURIComponent(query)}`
-        );
+        const res = await fetch(`/api/search/${encodeURIComponent(query)}`);
+        const json = await res.json();
+
         if (!res.ok) {
           setStatus("error");
           return;
         }
 
-        const json = await res.json();
-        setData(Array.isArray(json) ? json : []);
+        setData(Array.isArray(json.data) ? json.data : []);
         setStatus("loaded");
       } catch (err) {
         setStatus("error");
