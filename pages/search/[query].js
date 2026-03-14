@@ -6,3 +6,11 @@ const Query = ({ query }) => {
 };
 
 export default Query;
+
+export async function getServerSideProps({ params }) {
+  return {
+    props: {
+      query: params?.query ?? "",
+    },
+  };
+}

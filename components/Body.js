@@ -6,7 +6,7 @@ import Footer from "./Footer";
 
 const Body = ({ data: initialData, query }) => {
   const [data, setData] = useState(initialData || []);
-  const [status, setStatus] = useState(initialData && initialData.length ? "loaded" : "idle");
+  const [status, setStatus] = useState(initialData && initialData.length ? "loaded" : "loading");
 
   useEffect(() => {
     // If server-side data failed (empty), try fetching from the browser (can solve Cloudflare JS challenges)
@@ -62,8 +62,8 @@ const Body = ({ data: initialData, query }) => {
               <h1 className="sm:text-4xl text-3xl font-medium title-font mb-1 text-gray-300">
                 {query !== ""
                   ? "Showing results for: " +
-                    query.charAt(0).toUpperCase() +
-                    query.slice(1)
+                    query?.charAt(0)?.toUpperCase() +
+                    query?.slice(1)
                   : "Top 100"}
               </h1>
               {status === "loading" && (

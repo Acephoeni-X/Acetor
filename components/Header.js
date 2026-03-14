@@ -2,6 +2,12 @@ import React from "react";
 import Head from "next/head";
 
 const Header = ({ query, data, image }) => {
+  const safeQuery = typeof query === "string" ? query : "";
+  const capitalized =
+    safeQuery && safeQuery.length > 0
+      ? safeQuery.charAt(0).toUpperCase() + safeQuery.slice(1)
+      : "";
+
   return (
     <Head>
       <meta charSet="utf-8" />
@@ -10,24 +16,24 @@ const Header = ({ query, data, image }) => {
       <link rel="shortcut icon" href="/favicon.ico" />
       <title>
         Acetor
-        {query === ""
+        {safeQuery === ""
           ? " | Free Movies, TV-Series, Music, Games and Softwares"
-          : "-" + query.charAt(0).toUpperCase() + query.slice(1)}
+          : "-" + capitalized}
       </title>
       <link rel="shortcut icon" href="/Acetor.png" />
       <meta
         name="title"
         content={
-          query === ""
+          safeQuery === ""
             ? "Acetor is the most trusted Torrent website in the world, offering the most popular movies, TV-shows, applications, music, games and so on."
-            : `Get Magnet links for ${query}, and also download many more popular movies, TV-shows, applications, music, games and so on.`
+            : `Get Magnet links for ${safeQuery}, and also download many more popular movies, TV-shows, applications, music, games and so on.`
         }
       />
 
       <meta
         name="description"
         content={
-          query === ""
+          safeQuery === ""
             ? "Acetor is the most trusted Torrent website in the world, offering the most popular movies, TV-shows, applications, music, games and so on."
             : data && !Array.isArray(data) && data.name
             ? data.name
@@ -49,15 +55,15 @@ const Header = ({ query, data, image }) => {
       <meta
         property="og:title"
         content={
-          query === ""
+          safeQuery === ""
             ? "Acetor"
-            : "Acetor-" + query.charAt(0).toUpperCase() + query.slice(1)
+            : "Acetor-" + capitalized
         }
       />
       <meta
         property="og:description"
         content={
-          query === ""
+          safeQuery === ""
             ? "Acetor is the most trusted Torrent website in the world, offering the most popular movies, TV-series, applications, music, games and so on."
             : data && !Array.isArray(data) && data.descr
             ? data.descr
@@ -71,15 +77,15 @@ const Header = ({ query, data, image }) => {
       <meta
         property="twitter:title"
         content={
-          query === ""
+          safeQuery === ""
             ? "Acetor"
-            : "Acetor-" + query.charAt(0).toUpperCase() + query.slice(1)
+            : "Acetor-" + capitalized
         }
       />
       <meta
         property="twitter:description"
         content={
-          query === ""
+          safeQuery === ""
             ? "Acetor is the most trusted Torrent website in the world, offering the most popular movies, TV-series, shows, applications, music, games and so on."
             : data && !Array.isArray(data) && data.descr
             ? data.descr
