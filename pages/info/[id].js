@@ -2,10 +2,7 @@ import React from "react";
 import Imdb from "../../components/Imdb";
 import Info from "../../components/Info";
 import print_magnet from "../../services/magnet";
-import NodeCache from "node-cache";
-
-
-const cache = new NodeCache({ stdTTL: 600 }); // 10 min
+import { fetchWithCache } from "../../services/fetchWithCache";
 
 const Id = ({ data }) => {
   let magnet = print_magnet(data.info_hash, "Acetor-" + data.name);
@@ -23,21 +20,32 @@ const Id = ({ data }) => {
 export default Id;
 
 export async function getServerSideProps(context) {
-  console.log('Inside this')
   const { id } = context.query;
-  const cached = cache.get(id);
-  let data;
-  if (cached) {
-    data = cached;
-  }else{
-    data = await (await fetch(`${process.env.NEXT_PUBLIC_INFO}${id}`)).json()
-    cache.set(id, data);
+  let data = {};
+
+  try {
+    const url = `${process.env.NEXT_PUBLIC_INFO}${id}`;
+    const result = await fetchWithCache(url, { ttl: 600 });
+    if (result && typeof result === "object" && !Array.isArray(result)) {
+      data = result;
+    }
+  } catch (error) {
+    console.error("Failed to fetch info data:", error);
   }
-  console.log('data', data)
+
   if (data.imdb) {
-    let imdbData = await (await fetch(process.env.OMDB_API + data.imdb)).json();
-    Object.assign(data, imdbData);
+    try {
+      const imdbResult = await fetchWithCache(process.env.OMDB_API + data.imdb, {
+        ttl: 3600,
+      });
+      if (imdbResult && typeof imdbResult === "object") {
+        Object.assign(data, imdbResult);
+      }
+    } catch (error) {
+      console.error("Failed to fetch OMDB data:", error);
+    }
   }
+
   return {
     props: {
       data,

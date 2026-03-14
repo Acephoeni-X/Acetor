@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Body from "../../components/Body";
+import { fetchWithCache } from "../../services/fetchWithCache";
 
 export default function Home({ data }) {
   useEffect(() => {
@@ -11,12 +12,13 @@ export default function Home({ data }) {
 export async function getServerSideProps() {
   let data = [];
   try {
-    const response = await fetch(process.env.NEXT_PUBLIC_PRECOMPILED + "_100.json");
-    if (response.ok) {
-      data = await response.json();
+    const url = process.env.NEXT_PUBLIC_PRECOMPILED + "_100.json";
+    const result = await fetchWithCache(url);
+    if (Array.isArray(result)) {
+      data = result;
     }
   } catch (error) {
-    console.error('Failed to fetch audio data:', error);
+    console.error("Failed to fetch audio data:", error);
   }
   return {
     props: {
