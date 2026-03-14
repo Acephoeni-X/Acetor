@@ -1,10 +1,56 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
 import Header from "./Header";
 import Footer from "./Footer";
 
-const Body = ({ data, query }) => {
+const Body = ({ data: initialData, query }) => {
+  const [data, setData] = useState(initialData || []);
+  const [status, setStatus] = useState(initialData && initialData.length ? "loaded" : "idle");
+
+  useEffect(() => {
+    // If server-side data failed (empty), try fetching from the browser (can solve Cloudflare JS challenges)
+    if (!query) return;
+    if (initialData && initialData.length) return;
+
+    const fetchClientData = async () => {
+      setStatus("loading");
+      try {
+        const suffix = getSuffix(query);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_PRECOMPILED}${suffix}.json`);
+        if (res.ok) {
+          const json = await res.json();
+          setData(Array.isArray(json) ? json : []);
+          setStatus("loaded");
+        } else {
+          setStatus("error");
+        }
+      } catch (err) {
+        setStatus("error");
+      }
+    };
+
+    fetchClientData();
+  }, [query, initialData]);
+
+  const getSuffix = (q) => {
+    switch (q) {
+      case "movies":
+        return "_200";
+      case "games":
+        return "_400";
+      case "audio":
+        return "_100";
+      case "application":
+        return "_300";
+      case "others":
+        return "_600";
+      case "porn":
+        return "_500";
+      default:
+        return "_all";
+    }
+  };
 
   return (
     <>
@@ -20,6 +66,14 @@ const Body = ({ data, query }) => {
                     query.slice(1)
                   : "Top 100"}
               </h1>
+              {status === "loading" && (
+                <p className="text-gray-500">Loading data…</p>
+              )}
+              {status === "error" && (
+                <p className="text-red-300">
+                  Unable to load data right now. Please refresh or try again later.
+                </p>
+              )}
             </div>
             <div className="w-full mx-auto overflow-auto">
               <table className="table-auto w-full text-left whitespace-no-wrap">
@@ -80,6 +134,15 @@ const Body = ({ data, query }) => {
     </>
   );
 };
+
+function convertToGB(bytesValue) {
+  if (!bytesValue || isNaN(bytesValue)) return "0.00";
+  let gbValue = (bytesValue / (1024 * 1024 * 1024)).toFixed(2);
+  return gbValue;
+}
+
+export default Body;
+
 
 function convertToGB(bytesValue) {
   if (!bytesValue || isNaN(bytesValue)) return "0.00";
