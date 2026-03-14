@@ -1,8 +1,8 @@
 import React from "react";
-import Body from "../../components/Body";
+import SearchBody from "../../components/SearchBody";
 
 const Query = ({ query }) => {
-  return <Body data={[]} query={query} />;
+  return <SearchBody query={query} />;
 };
 
 export default Query;
