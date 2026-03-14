@@ -15,6 +15,8 @@ const Imdb = ({ data, magnet }) => {
               <Image
                 src={data.Poster}
                 alt={"Image: " + data.Title}
+                width={300}
+                height={450}
                 className="shadow rounded max-w-full h-auto align-middle border-none"
               />
             </div>

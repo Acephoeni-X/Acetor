@@ -4,21 +4,19 @@ import Body from "../components/Body";
 export default function Home({ data }) {
   useEffect(() => {
     fetch("/api/revalidate");
-  }, [data]);
+  }, []);
   return <Body data={data} query="" />;
 }
 
-export async function getStaticProps() {
-  let data;
+export async function getServerSideProps() {
+  let data = [];
   try {
-    const response = await fetch(process.env.PRECOMPILED + "_all.json");
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    const response = await fetch(process.env.NEXT_PUBLIC_PRECOMPILED + "_all.json");
+    if (response.ok) {
+      data = await response.json();
     }
-    data = await response.json();
   } catch (error) {
     console.error('Failed to fetch home data:', error);
-    data = []; // Fallback to empty array
   }
   return {
     props: {
