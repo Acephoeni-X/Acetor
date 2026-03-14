@@ -7,6 +7,7 @@ import Footer from "./Footer";
 const Body = ({ data: initialData, query }) => {
   const [data, setData] = useState(initialData || []);
   const [status, setStatus] = useState(initialData && initialData.length ? "loaded" : "loading");
+  const [retryKey, setRetryKey] = useState(0);
 
   useEffect(() => {
     // If server-side data failed (empty), try fetching from the browser (can solve Cloudflare JS challenges)
@@ -31,7 +32,7 @@ const Body = ({ data: initialData, query }) => {
     };
 
     fetchClientData();
-  }, [query, initialData]);
+  }, [query, initialData, retryKey]);
 
   const getSuffix = (q) => {
     switch (q) {
@@ -70,9 +71,17 @@ const Body = ({ data: initialData, query }) => {
                 <p className="text-gray-500">Loading data…</p>
               )}
               {status === "error" && (
-                <p className="text-red-300">
-                  Unable to load data right now. Please refresh or try again later.
-                </p>
+                <div className="space-y-3">
+                  <p className="text-red-300">
+                    Unable to load data right now. Please refresh or try again later.
+                  </p>
+                  <button
+                    className="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded"
+                    onClick={() => setRetryKey((key) => key + 1)}
+                  >
+                    Retry
+                  </button>
+                </div>
               )}
             </div>
             <div className="w-full mx-auto overflow-auto">
