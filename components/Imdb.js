@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Footer from "./Footer";
 import Header from "./Header";
+import Image from "next/image";
 
 const Imdb = ({ data, magnet }) => {
   const [modal, setModal] = useState(false);
@@ -11,7 +12,7 @@ const Imdb = ({ data, magnet }) => {
         <div className="container px-5 py-24 mx-auto">
           <div className="lg:w-4/5 h-auto mx-auto flex flex-wrap align-middle justify-center">
             <div className="w-6/12 sm:w-4/12 px-4 mb-3">
-              <img
+              <Image
                 src={data.Poster}
                 alt={"Image: " + data.Title}
                 className="shadow rounded max-w-full h-auto align-middle border-none"
