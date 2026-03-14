@@ -29,16 +29,18 @@ const Header = ({ query, data, image }) => {
         content={
           query === ""
             ? "Acetor is the most trusted Torrent website in the world, offering the most popular movies, TV-shows, applications, music, games and so on."
-            : Object.keys(data).length >= 0
+            : data && !Array.isArray(data) && data.name
             ? data.name
-            : data.map((m) => m.name)
+            : "Browse popular movies, games, and more."
         }
       />
 
       <meta
         name="keywords"
         content={
-          Object.keys(data).length >= 0 ? data.name : data.map((m) => m.name)
+          data && !Array.isArray(data) && data.name
+            ? data.name
+            : "movies, games, apps, music, torrents"
         }
       />
 
@@ -57,9 +59,9 @@ const Header = ({ query, data, image }) => {
         content={
           query === ""
             ? "Acetor is the most trusted Torrent website in the world, offering the most popular movies, TV-series, applications, music, games and so on."
-            : Object.keys(data).length >= 0
+            : data && !Array.isArray(data) && data.descr
             ? data.descr
-            : data.map((m) => m.descr)
+            : "Browse torrents for movies, games, apps, music, and more."
         }
       />
       <meta property="og:image" content={image ? image : "/Acetor.png"} />
@@ -79,9 +81,9 @@ const Header = ({ query, data, image }) => {
         content={
           query === ""
             ? "Acetor is the most trusted Torrent website in the world, offering the most popular movies, TV-series, shows, applications, music, games and so on."
-            : Object.keys(data).length >= 0
+            : data && !Array.isArray(data) && data.descr
             ? data.descr
-            : data.map((m) => m.descr)
+            : "Browse torrents for movies, games, apps, music, and more."
         }
       />
       <meta property="twitter:image" content={image ? image : "Acetor.png"} />

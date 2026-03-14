@@ -34,12 +34,28 @@ export async function fetchWithCache(url, options = {}) {
   });
 
   const contentType = (res.headers.get("content-type") || "").toLowerCase();
+  let parsed;
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`Fetch failed (${res.status}) ${url}: ${text}`);
+
+    // Cloudflare/JS challenge pages return HTML, not JSON.
+    // Returning null lets callers decide how to handle rate limits/blocking.
+    if (text.trim().startsWith("<")) {
+      console.warn(`Fetch returned non-JSON (status ${res.status}) for ${url}`);
+      return null;
+    }
+
+    // If we got a JSON error payload, return it so callers can inspect it.
+    try {
+      parsed = JSON.parse(text);
+      cache.set(url, parsed, ttl);
+      return parsed;
+    } catch {
+      console.warn(`Fetch returned non-JSON error response (status ${res.status}) for ${url}`);
+      return null;
+    }
   }
 
-  let parsed;
   if (contentType.includes("application/json")) {
     parsed = await res.json();
   } else {
