@@ -12,13 +12,20 @@ export default function Home({ data }) {
 export async function getStaticProps() {
   let data;
   const cache = new NodeCache({ stdTTL: 120 });
-  if (cache.get("audio_300")) {
-    data = cache;
+  if (cache.has("apps_300")) {
+    data = cache.get("apps_300");
   } else {
-    data = await (
-      await fetch(process.env.PRECOMPILED + "_300.json")
-    ).json();
-    cache.set("audio_300", data);
+    try {
+      const response = await fetch(process.env.PRECOMPILED + "_300.json");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      data = await response.json();
+      cache.set("apps_300", data);
+    } catch (error) {
+      console.error('Failed to fetch apps data:', error);
+      data = []; // Fallback to empty array
+    }
   }
   return {
     props: {

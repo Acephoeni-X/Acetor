@@ -15,10 +15,17 @@ export async function getStaticProps() {
   if(cache.has("movies_200")){
     data = cache.get("movies_200");
   }else{
-    data = await (
-        await fetch(process.env.PRECOMPILED + "_200.json")
-    ).json();
-    cache.set("movies_200", data);
+    try {
+      const response = await fetch(process.env.PRECOMPILED + "_200.json");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      data = await response.json();
+      cache.set("movies_200", data);
+    } catch (error) {
+      console.error('Failed to fetch movies data:', error);
+      data = []; // Fallback to empty array
+    }
   }
   return {
     props: {

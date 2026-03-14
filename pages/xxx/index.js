@@ -9,9 +9,17 @@ export default function Home({ data }) {
 }
 
 export async function getStaticProps() {
-  const data = await (
-    await fetch(process.env.PRECOMPILED + "_500.json")
-  ).json();
+  let data;
+  try {
+    const response = await fetch(process.env.PRECOMPILED + "_500.json");
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    data = await response.json();
+  } catch (error) {
+    console.error('Failed to fetch xxx data:', error);
+    data = []; // Fallback to empty array
+  }
   return {
     props: {
       data,
