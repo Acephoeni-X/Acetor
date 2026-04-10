@@ -8,13 +8,13 @@ export default function Home({ data }) {
   return <Body data={data} query="audio" />;
 }
 
-export async function getStaticProps() {
-  const data = await (
-    await fetch(process.env.NEXT_PUBLIC_PRECOMPILED + "_100.json")
-  ).json();
-  return {
-    props: {
-      data,
-    },
-  };
-}
+// export async function getStaticProps() {
+//   const data = await (
+//     await fetch(process.env.NEXT_PUBLIC_PRECOMPILED + "_100.json")
+//   ).json();
+//   return {
+//     props: {
+//       data,
+//     },
+//   };
+// }
