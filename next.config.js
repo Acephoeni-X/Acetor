@@ -2,7 +2,12 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["github.com", "ipfs.infura.io"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*",
+      },
+    ],
   },
 };
 
