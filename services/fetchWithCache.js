@@ -38,6 +38,34 @@ export async function fetchWithCache(url, options = {}) {
   if (!res.ok) {
     const text = await res.text();
 
+    // Try a fallback proxy if the upstream blocks the Vercel IP.
+    const isBlockedSource = url.includes("apibay.org") && [403, 429, 503].includes(res.status);
+    if (isBlockedSource) {
+      try {
+        const fallbackUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+        const proxyRes = await fetch(fallbackUrl, {
+          headers: {
+            ...DEFAULT_HEADERS,
+            ...headers,
+          },
+        });
+
+        if (proxyRes.ok) {
+          const fallbackContentType = (proxyRes.headers.get("content-type") || "").toLowerCase();
+          if (fallbackContentType.includes("application/json")) {
+            parsed = await proxyRes.json();
+          } else {
+            const fallbackText = await proxyRes.text();
+            parsed = JSON.parse(fallbackText);
+          }
+          cache.set(url, parsed, ttl);
+          return parsed;
+        }
+      } catch (fallbackError) {
+        console.warn(`Fallback proxy failed for ${url}:`, fallbackError);
+      }
+    }
+
     // Cloudflare/JS challenge pages return HTML, not JSON.
     // Returning null lets callers decide how to handle rate limits/blocking.
     if (text.trim().startsWith("<")) {
