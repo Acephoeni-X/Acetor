@@ -19,7 +19,7 @@ const Id = () => {
       setError(null);
 
       try {
-        const res = await fetch(`/api/info/${id}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_INFO}${id}`);
         const json = await res.json();
 
         if (!res.ok) {
@@ -28,7 +28,7 @@ const Id = () => {
           return;
         }
 
-        setData(json.data);
+        setData(json);
         setStatus("loaded");
       } catch (err) {
         setError("Unable to load item. Please try again.");
