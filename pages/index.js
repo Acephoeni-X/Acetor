@@ -10,7 +10,7 @@ export default function Home({ data }) {
 
 export async function getStaticProps() {
   const data = await (
-    await fetch(process.env.PRECOMPILED + "_all.json")
+    await fetch(process.env.NEXT_PUBLIC_PRECOMPILED + "_all.json")
   ).json();
   return {
     props: {
