@@ -14,6 +14,11 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Missing id" });
   }
 
+  if (!process.env.NEXT_PUBLIC_INFO) {
+    console.error("Missing NEXT_PUBLIC_INFO environment variable");
+    return res.status(500).json({ error: "Missing NEXT_PUBLIC_INFO environment variable" });
+  }
+
   try {
     const url = `${process.env.NEXT_PUBLIC_INFO}${id}`;
     const result = await fetchWithCache(url, { ttl: 600 });
