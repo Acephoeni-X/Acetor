@@ -5,6 +5,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 
 const Body = ({ data, query }) => {
+  console.log("Data in Body component:", data);
   return (
     <>
       <Header query={query} data={data} />
