@@ -9,16 +9,13 @@ export async function getStaticProps() {
   const headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
     'Accept': 'application/json, text/plain, */*',
-    'Accept-Language': 'en-US,en;q=0.9',
     'Referer': 'https://apibay.org/',
-    'Origin': 'https://apibay.org'
   };
 
   try {
     const res = await fetch(url, { headers });
     if (!res.ok) {
-      const errorText = await res.text();
-      console.error(`Fetch failed for ${url}. Status: ${res.status}. Body: ${errorText.substring(0, 100)}`);
+      console.error(`Fetch failed for ${url}. Status: ${res.status}`);
       throw new Error(`API Status ${res.status}`);
     }
     const data = await res.json();

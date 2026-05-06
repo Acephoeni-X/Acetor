@@ -1,11 +1,62 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
 import Header from "./Header";
 import Footer from "./Footer";
 
-const Body = ({ data, query, error }) => {
-  console.log("Data in Body component:", data);
+const Body = ({ data: initialData, query, error: initialError }) => {
+  const [data, setData] = useState(initialData || []);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(initialError);
+
+  useEffect(() => {
+    // If we have no data, try to fetch on the client side
+    // This bypasses Cloudflare blocks that affect Vercel's servers
+    if (!data || data.length === 0) {
+      fetchClientData();
+    }
+  }, [query]);
+
+  const fetchClientData = async () => {
+    setLoading(true);
+    setError(null);
+    
+    let url = "";
+    if (query === "") {
+      url = `${process.env.NEXT_PUBLIC_PRECOMPILED}_all.json`;
+    } else if (["audio", "movies", "application", "games", "porn", "others"].includes(query)) {
+      const map = {
+        "audio": "_100.json",
+        "movies": "_200.json",
+        "application": "_300.json",
+        "games": "_400.json",
+        "porn": "_500.json",
+        "others": "_600.json"
+      };
+      url = `${process.env.NEXT_PUBLIC_PRECOMPILED}${map[query]}`;
+    } else {
+      // It's a search query
+      url = `${process.env.NEXT_PUBLIC_SEARCH}${query}`;
+    }
+
+    try {
+      const res = await fetch(url, {
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+        }
+      });
+      
+      if (!res.ok) throw new Error(`Status ${res.status}`);
+      const result = await res.json();
+      setData(result || []);
+    } catch (err) {
+      console.error("Client-side fetch failed:", err);
+      setError("Unable to load data. The Pirate Bay API might be blocking the request or down.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <Header query={query} data={data} />
@@ -20,14 +71,21 @@ const Body = ({ data, query, error }) => {
                     query.slice(1)
                   : "Top 100"}
               </h1>
+              {loading && <p className="text-green-400 mt-4 animate-pulse">Loading data from API...</p>}
               {error && (
-                <p className="text-red-400 mt-4 bg-red-900/20 p-4 rounded border border-red-500/50">
-                  {error}
-                </p>
+                <div className="mt-4 bg-red-900/20 p-4 rounded border border-red-500/50">
+                  <p className="text-red-400">{error}</p>
+                  <button 
+                    onClick={fetchClientData}
+                    className="mt-2 text-sm bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded transition"
+                  >
+                    Retry Fetching
+                  </button>
+                </div>
               )}
             </div>
             <div className="w-full mx-auto overflow-auto">
-              {!error && (!data || data.length === 0) ? (
+              {!loading && !error && (!data || data.length === 0) ? (
                 <div className="text-center py-10">
                   <p className="text-gray-400 text-xl">No torrents found matching your query.</p>
                 </div>
