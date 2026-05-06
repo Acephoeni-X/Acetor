@@ -4,7 +4,7 @@ import Link from "next/link";
 import Header from "./Header";
 import Footer from "./Footer";
 
-const Body = ({ data, query }) => {
+const Body = ({ data, query, error }) => {
   console.log("Data in Body component:", data);
   return (
     <>
@@ -20,58 +20,69 @@ const Body = ({ data, query }) => {
                     query.slice(1)
                   : "Top 100"}
               </h1>
+              {error && (
+                <p className="text-red-400 mt-4 bg-red-900/20 p-4 rounded border border-red-500/50">
+                  {error}
+                </p>
+              )}
             </div>
             <div className="w-full mx-auto overflow-auto">
-              <table className="table-auto w-full text-left whitespace-no-wrap">
-                <thead>
-                  <tr>
-                    <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-300 text-sm bg-gray-600 rounded-tl rounded-bl">
-                      Name
-                    </th>
-                    <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-300 text-sm bg-gray-600">
-                      Size
-                    </th>
-                    <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-300 text-sm bg-gray-600">
-                      Seeders
-                    </th>
-                    <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-300 text-sm bg-gray-600">
-                      Leechers
-                    </th>
-                    <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-300 text-sm bg-gray-600">
-                      User
-                    </th>
-                    <th className="w-10 title-font tracking-wider font-medium text-gray-300 text-sm bg-gray-600 rounded-tr rounded-br"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.map((d) => (
-                    <tr
-                      key={d.id}
-                      className="hover:bg-gray-700 transition cursor-pointer"
-                      onClick={() => (window.location.href = `/info/${d.id}`)}
-                    >
-                      <td className="border-b-2 border-gray-200 px-4 py-3 text-gray-300">
-                        <Link href={`/info/${d.id}`} className="hover:underline">
-                          {d.name}
-                        </Link>
-                      </td>
-                      <td className="border-b-2 border-gray-200 px-4 py-3 text-gray-300">
-                        {d.size ? convertToGB(d.size) + " GB" : "N/A"}
-                      </td>
-                      <td className="border-b-2 border-gray-200 px-4 py-3 text-green-300">
-                        {d.seeders} ⬆
-                      </td>
-                      <td className="border-b-2 border-gray-200 px-4 py-3 text-red-300">
-                        {d.leechers} ⬇
-                      </td>
-                      <td className="border-b-2 border-gray-200 px-4 py-3 text-gray-300">
-                        {d.username}
-                      </td>
-                      <td className="border-b-2 border-gray-200 w-10 text-center text-gray-300"></td>
+              {!error && (!data || data.length === 0) ? (
+                <div className="text-center py-10">
+                  <p className="text-gray-400 text-xl">No torrents found matching your query.</p>
+                </div>
+              ) : (
+                <table className="table-auto w-full text-left whitespace-no-wrap">
+                  <thead>
+                    <tr>
+                      <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-300 text-sm bg-gray-600 rounded-tl rounded-bl">
+                        Name
+                      </th>
+                      <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-300 text-sm bg-gray-600">
+                        Size
+                      </th>
+                      <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-300 text-sm bg-gray-600">
+                        Seeders
+                      </th>
+                      <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-300 text-sm bg-gray-600">
+                        Leechers
+                      </th>
+                      <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-300 text-sm bg-gray-600">
+                        User
+                      </th>
+                      <th className="w-10 title-font tracking-wider font-medium text-gray-300 text-sm bg-gray-600 rounded-tr rounded-br"></th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {data && data.map((d) => (
+                      <tr
+                        key={d.id}
+                        className="hover:bg-gray-700 transition cursor-pointer"
+                        onClick={() => (window.location.href = `/info/${d.id}`)}
+                      >
+                        <td className="border-b-2 border-gray-200 px-4 py-3 text-gray-300">
+                          <Link href={`/info/${d.id}`} className="hover:underline">
+                            {d.name}
+                          </Link>
+                        </td>
+                        <td className="border-b-2 border-gray-200 px-4 py-3 text-gray-300">
+                          {d.size ? convertToGB(d.size) + " GB" : "N/A"}
+                        </td>
+                        <td className="border-b-2 border-gray-200 px-4 py-3 text-green-300">
+                          {d.seeders} ⬆
+                        </td>
+                        <td className="border-b-2 border-gray-200 px-4 py-3 text-red-300">
+                          {d.leechers} ⬇
+                        </td>
+                        <td className="border-b-2 border-gray-200 px-4 py-3 text-gray-300">
+                          {d.username}
+                        </td>
+                        <td className="border-b-2 border-gray-200 w-10 text-center text-gray-300"></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
         </section>

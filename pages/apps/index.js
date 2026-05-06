@@ -1,20 +1,26 @@
-import { useEffect } from "react";
 import Body from "../../components/Body";
 
 export default function Home({ data }) {
-  useEffect(() => {
-    fetch("/api/revalidate/apps");
-  }, [data]);
   return <Body data={data} query="application" />;
 }
 
 export async function getStaticProps() {
-  const data = await (
-    await fetch(process.env.NEXT_PUBLIC_PRECOMPILED + "_300.json")
-  ).json();
-  return {
-    props: {
-      data,
-    },
-  };
+  try {
+    const res = await fetch(process.env.NEXT_PUBLIC_PRECOMPILED + "_300.json", {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+      }
+    });
+    const data = await res.json();
+    return {
+      props: { data },
+      revalidate: 3600,
+    };
+  } catch (error) {
+    console.error("Fetch error:", error);
+    return {
+      props: { data: [] },
+      revalidate: 60,
+    };
+  }
 }
