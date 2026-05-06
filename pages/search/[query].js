@@ -16,15 +16,22 @@ export async function getServerSideProps(context) {
     'public, s-maxage=60, stale-while-revalidate=120'
   );
 
+  const url = `${process.env.NEXT_PUBLIC_SEARCH}${query}`;
+  const headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+    'Accept': 'application/json, text/plain, */*',
+    'Accept-Language': 'en-US,en;q=0.9',
+    'Referer': 'https://apibay.org/',
+    'Origin': 'https://apibay.org'
+  };
+
   try {
-    const fetchRes = await fetch(`${process.env.NEXT_PUBLIC_SEARCH}${query}`, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-      }
-    });
+    const fetchRes = await fetch(url, { headers });
 
     if (!fetchRes.ok) {
-      throw new Error(`API responded with status: ${fetchRes.status}`);
+      const errorText = await fetchRes.text();
+      console.error(`Fetch failed for ${url}. Status: ${fetchRes.status}. Body: ${errorText.substring(0, 100)}`);
+      throw new Error(`API Status ${fetchRes.status}`);
     }
 
     const data = await fetchRes.json();
