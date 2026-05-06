@@ -17,18 +17,29 @@ const Id = ({ data: initialData }) => {
     if (!data && id) {
       fetchData();
     }
-  }, [id]);
+  }, [id, data]);
 
   const fetchData = async () => {
     setLoading(true);
     setError(null);
+    const targetUrl = `${process.env.NEXT_PUBLIC_INFO}${id}`;
+    
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_INFO}${id}`);
+      // 1. Try internal proxy
+      let res = await fetch(`/api/proxy?url=${encodeURIComponent(targetUrl)}`);
+      
+      if (!res.ok) {
+        // 2. Try public CORS proxy
+        console.warn("Internal proxy failed for info, trying public CORS proxy...");
+        res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`);
+      }
+
       if (!res.ok) throw new Error(`API Status ${res.status}`);
       const infoData = await res.json();
 
       if (infoData.imdb) {
         try {
+          // OMDB usually has CORS enabled, so direct fetch is fine
           const imdbRes = await fetch(process.env.OMDB_API + infoData.imdb);
           if (imdbRes.ok) {
             const imdbDetails = await imdbRes.json();
@@ -41,7 +52,7 @@ const Id = ({ data: initialData }) => {
       setData(infoData);
     } catch (err) {
       console.error("Client fetch failed", err);
-      setError("Failed to load torrent information. The API might be blocked.");
+      setError("Failed to load torrent information. Access might be restricted.");
     } finally {
       setLoading(false);
     }
@@ -68,8 +79,8 @@ const Id = ({ data: initialData }) => {
         <Navbar />
         <div className="flex-1 flex items-center justify-center text-gray-300">
           <div className="text-center p-8 bg-red-900/20 border border-red-500/50 rounded-lg max-w-md">
-            <h2 className="text-2xl font-bold text-red-400 mb-4">Error</h2>
-            <p className="mb-6">{error || "Torrent details could not be retrieved."}</p>
+            <h2 className="text-2xl font-bold text-red-400 mb-4">Access Denied</h2>
+            <p className="mb-6">{error || "Could not retrieve torrent details."}</p>
             <div className="flex justify-center space-x-4">
               <button 
                 onClick={() => router.back()}
@@ -122,25 +133,10 @@ export async function getServerSideProps(context) {
 
   try {
     const infoRes = await fetch(url, { headers });
-    if (!infoRes.ok) {
-      console.error(`Fetch failed for ${url}. Status: ${infoRes.status}`);
-      throw new Error(`Status ${infoRes.status}`);
-    }
+    if (!infoRes.ok) throw new Error(`Status ${infoRes.status}`);
     const data = await infoRes.json();
-
-    if (data.imdb) {
-      try {
-        const imdbRes = await fetch(process.env.OMDB_API + data.imdb, { headers: { 'User-Agent': headers['User-Agent'] } });
-        if (imdbRes.ok) {
-          const imdbData = await imdbRes.json();
-          Object.assign(data, imdbData);
-        }
-      } catch (e) {}
-    }
-
     return { props: { data } };
   } catch (error) {
-    console.error("Server-side info fetch failed, falling back to client:", error.message);
     return { props: { data: null } };
   }
 }

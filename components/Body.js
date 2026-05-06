@@ -10,8 +10,6 @@ const Body = ({ data: initialData, query, error: initialError }) => {
   const [error, setError] = useState(initialError);
 
   useEffect(() => {
-    // If we have no data, try to fetch on the client side
-    // This bypasses Cloudflare blocks that affect Vercel's servers
     if (!data || data.length === 0) {
       fetchClientData();
     }
@@ -21,9 +19,9 @@ const Body = ({ data: initialData, query, error: initialError }) => {
     setLoading(true);
     setError(null);
     
-    let url = "";
+    let targetUrl = "";
     if (query === "") {
-      url = `${process.env.NEXT_PUBLIC_PRECOMPILED}_all.json`;
+      targetUrl = `${process.env.NEXT_PUBLIC_PRECOMPILED}_all.json`;
     } else if (["audio", "movies", "application", "games", "porn", "others"].includes(query)) {
       const map = {
         "audio": "_100.json",
@@ -33,25 +31,30 @@ const Body = ({ data: initialData, query, error: initialError }) => {
         "porn": "_500.json",
         "others": "_600.json"
       };
-      url = `${process.env.NEXT_PUBLIC_PRECOMPILED}${map[query]}`;
+      targetUrl = `${process.env.NEXT_PUBLIC_PRECOMPILED}${map[query]}`;
     } else {
-      // It's a search query
-      url = `${process.env.NEXT_PUBLIC_SEARCH}${query}`;
+      targetUrl = `${process.env.NEXT_PUBLIC_SEARCH}${query}`;
     }
 
+    // Try multiple fetch methods to bypass blocks
     try {
-      const res = await fetch(url, {
-        headers: {
-          'Accept': 'application/json, text/plain, */*',
-        }
-      });
+      // 1. Try our internal Vercel proxy first (fastest, but might get 403)
+      let response = await fetch(`/api/proxy?url=${encodeURIComponent(targetUrl)}`);
       
-      if (!res.ok) throw new Error(`Status ${res.status}`);
-      const result = await res.json();
+      if (!response.ok) {
+        // 2. If Vercel is blocked (403), use a public CORS proxy (slower but bypasses CORS and IP blocks)
+        console.warn("Internal proxy blocked or failed, trying public CORS proxy...");
+        const corsProxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
+        response = await fetch(corsProxyUrl);
+      }
+      
+      if (!response.ok) throw new Error(`Status ${response.status}`);
+      
+      const result = await response.json();
       setData(result || []);
     } catch (err) {
-      console.error("Client-side fetch failed:", err);
-      setError("Unable to load data. The Pirate Bay API might be blocking the request or down.");
+      console.error("All fetch methods failed:", err);
+      setError("Unable to load data. The API is currently blocking access or unreachable.");
     } finally {
       setLoading(false);
     }
@@ -71,7 +74,7 @@ const Body = ({ data: initialData, query, error: initialError }) => {
                     query.slice(1)
                   : "Top 100"}
               </h1>
-              {loading && <p className="text-green-400 mt-4 animate-pulse">Loading data from API...</p>}
+              {loading && <p className="text-green-400 mt-4 animate-pulse">Fetching from mirror...</p>}
               {error && (
                 <div className="mt-4 bg-red-900/20 p-4 rounded border border-red-500/50">
                   <p className="text-red-400">{error}</p>
@@ -79,7 +82,7 @@ const Body = ({ data: initialData, query, error: initialError }) => {
                     onClick={fetchClientData}
                     className="mt-2 text-sm bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded transition"
                   >
-                    Retry Fetching
+                    Retry
                   </button>
                 </div>
               )}
@@ -87,7 +90,7 @@ const Body = ({ data: initialData, query, error: initialError }) => {
             <div className="w-full mx-auto overflow-auto">
               {!loading && !error && (!data || data.length === 0) ? (
                 <div className="text-center py-10">
-                  <p className="text-gray-400 text-xl">No torrents found matching your query.</p>
+                  <p className="text-gray-400 text-xl">No torrents found.</p>
                 </div>
               ) : (
                 <table className="table-auto w-full text-left whitespace-no-wrap">
