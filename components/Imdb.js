@@ -17,7 +17,7 @@ const Imdb = ({ data, magnet }) => {
                 alt={"Image: " + data.Title}
                 width={300}
                 height={450}
-                className="shadow rounded max-w-full h-auto align-middle border-none"
+                className="shadow rounded max-w-full align-middle border-none"
               />
             </div>
             <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 lg:mt-0">

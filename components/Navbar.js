@@ -14,7 +14,7 @@ const Navbar = () => {
               src="/Acetor.png"
               width={50}
               height={54}
-              className="hover:cursor-pointer hover:animate-bounce "
+              className="hover:cursor-pointer hover:animate-bounce h-auto"
               alt="acetor"
             ></Image>
         </Link>

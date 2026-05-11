@@ -92,7 +92,7 @@ const Header = ({ query, data, image }) => {
             : "Browse torrents for movies, games, apps, music, and more."
         }
       />
-      <meta property="twitter:image" content={image ? image : "Acetor.png"} />
+      <meta property="twitter:image" content={image ? image : "/Acetor.png"} />
     </Head>
   );
 };
