@@ -1,12 +1,21 @@
-import { useRouter } from "next/router";
-import SearchBody from "../../components/SearchBody";
+import React from "react";
+import Body from "../../components/Body";
 
-const Query = () => {
-  const router = useRouter();
-  const queryParam = router.query.query;
-  const query = Array.isArray(queryParam) ? queryParam[0] : queryParam || "";
-
-  return <SearchBody query={query} />;
+const Query = ({ data, query }) => {
+  return <Body data={data} query={query} />;
 };
 
 export default Query;
+
+export async function getServerSideProps(context) {
+  const { query } = context.query;
+  let data = await (
+    await fetch(`${process.env.NEXT_PUBLIC_SEARCH}${query} `)
+  ).json();
+  return {
+    props: {
+      data,
+      query,
+    },
+  };
+}

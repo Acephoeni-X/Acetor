@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   let revalidate = false;
   const { query } = req.query;
   try {
-    await res.revalidate(`/${query}`);
+    await res.revalidate({ pathname: `/${query}` });
     revalidate = true;
   } catch (err) {
     console.log(err);

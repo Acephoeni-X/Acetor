@@ -85,7 +85,13 @@ export async function fetchWithCache(url, options = {}) {
   }
 
   if (contentType.includes("application/json")) {
-    parsed = await res.json();
+    try {
+      parsed = await res.json();
+    } catch (jsonError) {
+      console.warn(`Response claimed JSON but parsing failed for ${url}:`, jsonError);
+      // Fall back to text
+      parsed = await res.text();
+    }
   } else {
     parsed = await res.text();
   }

@@ -1,9 +1,18 @@
-import { useEffect } from "react";
+import React from "react";
 import Body from "../components/Body";
 
-export default function Home() {
-  useEffect(() => {
-    fetch("/api/revalidate");
-  }, []);
-  return <Body data={[]} query="" />;
+export default function Home({ data }) {
+  return <Body data={data} query="" />;
+}
+
+export async function getStaticProps() {
+  const data = await (
+    await fetch(process.env.PRECOMPILED + "_all.json")
+  ).json();
+  return {
+    props: {
+      data,
+    },
+    revalidate: 3600, // Regenerate every hour
+  };
 }

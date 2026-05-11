@@ -1,39 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
 import Header from "./Header";
 import Footer from "./Footer";
 
-const Body = ({ data: initialData, query }) => {
-  const [data, setData] = useState(initialData || []);
-  const [status, setStatus] = useState(initialData && initialData.length ? "loaded" : "loading");
-  const [retryKey, setRetryKey] = useState(0);
-
-  useEffect(() => {
-    // If server-side data failed (empty), try fetching from the browser (can solve Cloudflare JS challenges)
-    const shouldFetch = !initialData || !initialData.length;
-    if (!shouldFetch) return;
-
-    const fetchClientData = async () => {
-      setStatus("loading");
-      try {
-        const suffix = getSuffix(query);
-        const res = await fetch(`${process.env.NEXT_PUBLIC_PRECOMPILED}${suffix}.json`);
-        if (res.ok) {
-          const json = await res.json();
-          setData(Array.isArray(json) ? json : []);
-          setStatus("loaded");
-        } else {
-          setStatus("error");
-        }
-      } catch (err) {
-        setStatus("error");
-      }
-    };
-
-    fetchClientData();
-  }, [query, initialData, retryKey]);
-
+const Body = ({ data, query }) => {
   const getSuffix = (q) => {
     switch (q) {
       case "movies":
@@ -67,22 +38,6 @@ const Body = ({ data: initialData, query }) => {
                     query?.slice(1)
                   : "Top 100"}
               </h1>
-              {status === "loading" && (
-                <p className="text-gray-500">Loading data…</p>
-              )}
-              {status === "error" && (
-                <div className="space-y-3">
-                  <p className="text-red-300">
-                    Unable to load data right now. Please refresh or try again later.
-                  </p>
-                  <button
-                    className="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded"
-                    onClick={() => setRetryKey((key) => key + 1)}
-                  >
-                    Retry
-                  </button>
-                </div>
-              )}
             </div>
             <div className="w-full mx-auto overflow-auto">
               <table className="table-auto w-full text-left whitespace-no-wrap">
@@ -107,33 +62,34 @@ const Body = ({ data: initialData, query }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.map((d) => (
-                    <tr
-                      key={d.id}
-                      className="hover:bg-gray-700 transition cursor-pointer"
-                      onClick={() => (window.location.href = `/info/${d.id}`)}
-                    >
-                      <td className="border-b-2 border-gray-200 px-4 py-3 text-gray-300">
-                        <Link href={`/info/${d.id}`} className="hover:underline">
-                          {d.name}
-                        </Link>
-                      </td>
-                      <td className="border-b-2 border-gray-200 px-4 py-3 text-gray-300">
-                        {d.size ? convertToGB(d.size) + " GB" : "N/A"}
-                      </td>
-                      <td className="border-b-2 border-gray-200 px-4 py-3 text-green-300">
-                        {d.seeders} ⬆
-                      </td>
-                      <td className="border-b-2 border-gray-200 px-4 py-3 text-red-300">
-                        {d.leechers} ⬇
-                      </td>
-                      <td className="border-b-2 border-gray-200 px-4 py-3 text-gray-300">
-                        {d.username}
-                      </td>
-                      <td className="border-b-2 border-gray-200 w-10 text-center text-gray-300"></td>
-                    </tr>
-                  ))}
-                  {status === "loaded" && data.length === 0 && (
+                  {data && data.length > 0 ? (
+                    data.map((d) => (
+                      <tr
+                        key={d.id}
+                        className="hover:bg-gray-700 transition cursor-pointer"
+                        onClick={() => (window.location.href = `/info/${d.id}`)}
+                      >
+                        <td className="border-b-2 border-gray-200 px-4 py-3 text-gray-300">
+                          <Link href={`/info/${d.id}`} className="hover:underline">
+                            {d.name}
+                          </Link>
+                        </td>
+                        <td className="border-b-2 border-gray-200 px-4 py-3 text-gray-300">
+                          {d.size ? convertToGB(d.size) + " GB" : "N/A"}
+                        </td>
+                        <td className="border-b-2 border-gray-200 px-4 py-3 text-green-300">
+                          {d.seeders} ⬆
+                        </td>
+                        <td className="border-b-2 border-gray-200 px-4 py-3 text-red-300">
+                          {d.leechers} ⬇
+                        </td>
+                        <td className="border-b-2 border-gray-200 px-4 py-3 text-gray-300">
+                          {d.username}
+                        </td>
+                        <td className="border-b-2 border-gray-200 w-10 text-center text-gray-300"></td>
+                      </tr>
+                    ))
+                  ) : (
                     <tr>
                       <td colSpan={6} className="border-b-2 border-gray-200 px-4 py-6 text-center text-gray-400">
                         No results available. Please refresh or try another category.
