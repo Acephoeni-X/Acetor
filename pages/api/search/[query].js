@@ -14,13 +14,13 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Missing search query" });
   }
 
-  if (!process.env.NEXT_PUBLIC_SEARCH) {
-    console.error("Missing NEXT_PUBLIC_SEARCH environment variable");
-    return res.status(500).json({ error: "Missing NEXT_PUBLIC_SEARCH environment variable" });
+  if (!process.env.SEARCH) {
+    console.error("Missing SEARCH environment variable");
+    return res.status(500).json({ error: "Missing SEARCH environment variable" });
   }
 
   try {
-    const url = `${process.env.NEXT_PUBLIC_SEARCH}${encodeURIComponent(query)}`;
+    const url = `${process.env.SEARCH}${encodeURIComponent(query)}`;
     const result = await fetchWithCache(url, { ttl: 60 });
 
     if (!result || !Array.isArray(result)) {

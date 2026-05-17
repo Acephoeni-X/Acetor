@@ -11,7 +11,7 @@ export default Query;
 export async function getServerSideProps(context) {
   const { query } = context.query;
   try {
-    const data = await fetchWithCache(`${process.env.NEXT_PUBLIC_SEARCH}${query}`);
+    const data = await fetchWithCache(`${process.env.SEARCH}${query}`);
     return {
       props: {
         data: data || [],
